@@ -47,8 +47,27 @@ app.get(`/caju`, (req, res) => {
 
 app.get(`/pegarUsuario`, (req, res) => {
     const userEmail = req.query.email;
-    res.send(`O email requisitado é: ${userEmail}`)
+    let userReq = null;
+
+    usuarios.forEach((user) => {
+        if (user.email === userEmail) {
+            userReq = user;
+        }
+    })
+
+    if (userReq === null) {
+        return res.status(404).send("Usuario não encontrado")
+    }
+
+    return res.status(200).send(userReq)
 });
+
+app.post("/usuario", (req, res) => {
+    const newUser = req.body;
+    usuarios.push(newUser);
+
+    res.send("Usuário cadastrado com sucesso")
+})
 
 
 app.listen(PORT, () => {
